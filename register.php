@@ -11,33 +11,12 @@
         isset($_POST['lastname']) &&
         isset($_POST['g-recaptcha-response'])
     ){
-        //connexion a la bdd
-        try{
-            $bdd = new PDO('mysql:host=localhost;dbname=la_saint_redstone;charset=utf8', 'root', '');
-
-            $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        } catch(Exception $e){
-
-            die('Il y a un problème avec la bdd : ' . $e->getMessage());
-        }
-        
-
+    
         if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
             $errors[] = 'Email invalide !';
         } // email
 
-        $stmt = $bdd->prepare("SELECT * FROM users WHERE email=?");
-        $stmt->execute([
-            $_POST['email']
-            ]); 
-        $user = $stmt->fetch();
-
-        if ($user) {
-            $errors[] = 'Email déja utilisé !';
-        } // email déja utilisé ou pas 
-
-
+    
 
         if(!preg_match('/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[ !"#$%&\'()*+,\-\.\/:;<=>?\\\\@[\]\^_`{|}~]).{8,1000}$/', $_POST['password'])){
             $errors[] = 'Mot de passe doit contenir minimum 1 maj, 1 min, 1 chiffre et un caractère spécial !';
@@ -61,6 +40,29 @@
             $errors[] = 'Captcha invalide !';
         } // captcha google
 
+
+        if(!isset($errors)){
+            //connexion a la bdd
+            try{
+                $bdd = new PDO('mysql:host=localhost;dbname=la_saint_redstone;charset=utf8', 'root', '');
+    
+                $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+            } catch(Exception $e){
+    
+                die('Il y a un problème avec la bdd : ' . $e->getMessage());
+            }
+
+                $stmt = $bdd->prepare("SELECT * FROM users WHERE email=?");
+            $stmt->execute([
+                $_POST['email']
+                ]); 
+            $user = $stmt->fetch();
+
+            if ($user) {
+                $errors[] = 'Email déja utilisé !';
+            } // email déja utilisé ou pas 
+        }
    
 
         if(!isset($errors)){
