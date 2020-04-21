@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 21, 2020 at 10:13 AM
+-- Generation Time: Apr 21, 2020 at 11:34 AM
 -- Server version: 5.7.24
 -- PHP Version: 7.2.19
 
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `la saint redstone`
+-- Database: `la_saint_redstone`
 --
 
 -- --------------------------------------------------------

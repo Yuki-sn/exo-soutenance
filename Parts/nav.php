@@ -32,7 +32,7 @@
 
         </ul>
 
-        <form class="form-inline my-2 my-lg-0" method="GET" action="articles-search.php">
+        <form class="form-inline my-2 my-lg-0" method="GET">
 
             <input class="form-control mr-sm-2" type="text" placeholder="Chercher un article" name="query">
 
