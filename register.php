@@ -1,6 +1,10 @@
 <?php
     // inclution du fichier si captcha ok
     require 'recaptchaValid.php';
+    // inclusion de la fonction connexion
+    require 'Parts/connexion.php';
+    session_start();
+
 
     // appel des variable du form
     if(
@@ -27,12 +31,12 @@
         } // mdp
 
 
-        if(!preg_match('/^[a-z áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ\']{2,25}$/i', $_POST['firstname'])){
+        if(!preg_match('/^[a-z áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ\']{2,50}$/i', $_POST['firstname'])){
             $errors[] = 'Prénom invalide';
         } // prénom
 
 
-        if(!preg_match('/^[a-z áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ\']{2,25}$/i', $_POST['lastname'])){
+        if(!preg_match('/^[a-z áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ\']{2,50}$/i', $_POST['lastname'])){
             $errors[] = 'Nom invalide';
         } // nom
 
@@ -113,13 +117,13 @@
     <?php 
         include 'Parts/nav.php'; 
         
-        if(isset($errors)){
+        if(isset($errors)){ // message erreur
             foreach($errors as $error){
                 echo '<p style="color:red;">' . $error . '</p>';
             }
         }
 
-        if(isset($successMessage)){
+        if(isset($successMessage)){ // message succes
             echo '<p style="color:green;">' . $successMessage . '</p>';
         } else {
     ?>

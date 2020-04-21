@@ -20,15 +20,39 @@
             <li class="nav-item">
                 <a class="nav-link" href="articles.php">Articles</a>
             </li>
+        <?php 
+        
+            if(isConnected()){
+                echo '
+                <li class="nav-item">
+                    <a class="nav-link" href="logout.php">Deconnexion</a>
+                </li>
 
-            <li class="nav-item">
-                <a class="nav-link" href="login.php">Connexion</a>
-             </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="profil.php">profil</a>
+                </li>
 
+                <li class="nav-item">
+                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Admin</a>
+                    <div class="dropdown-menu"> 
+                        <a class="dropdown-item" href="admin-add-article.php">Ajouter un article</a>
+                        </div>
+                </li>';
+            } else {
+                echo '
 
-            <li class="nav-item">
+                <li class="nav-item">
+                    <a class="nav-link" href="login.php">Connexion</a>
+                </li>
+
+                <li class="nav-item">
                 <a class="nav-link" href="register.php">Inscription</a>
-            </li>
+                </li>';
+            };  
+        
+        ?>
+            
+            
 
         </ul>
 

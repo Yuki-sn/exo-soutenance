@@ -1,10 +1,10 @@
 <?php 
-    require 'Parts/connexion.php';
+    require 'Parts/connexion.php'; // on recup les identifiant de connexion
     session_start();
     if(!isConnected()){
         if(
             isset($_POST['email']) &&
-            isset($_POST['password'])
+            isset($_POST['password']) // verif de l'existance des champ
         ){         
             if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
                 $errors[] = 'Email invalide !';
@@ -25,23 +25,28 @@
                     die('Il y a un problème avec la bdd : ' . $e->getMessage());
                 }               
         
-                $stmt = $bdd->prepare("SELECT * FROM `users` WHERE `email` ='?' AND `password` = '?'");
+                // verification que l'email et le mdp soit exacte
+                $stmt = $bdd->prepare("SELECT * FROM `users` WHERE `email` = ?");
                 $stmt->execute([
-                    $_POST['email'],
-                    password_hash($_POST['password'], PASSWORD_BCRYPT)                    
+                    $_POST['email']
                 ]);
                 $user = $stmt->fetch();        
-                if (!$user) {
-                    $successMessage = 'Vous êtes bien connecté ';
+                if (!empty($user)) {
+                    
+                    if(password_verify($_POST['password'], $user['password'])){
+                        // message de succès + connection de l'utilisateur*
+                        $successMessage = " connexion établie ";
+
+                        $_SESSION['user'] = $user;
+
+                    } else {
+                        $errors[] = 'Mot de passe incorrect';
+                    }
+
                 }else {
-                    $errors[] = 'Probleme de connexion';
-                };                  
-                if($successMessage){
-                    $_SESSION['user'] = array(
-                        'firstname' => $_POST['email'],
-                        'lastname' => $_POST['password'],
-                    );
-                };
+                    $errors[] = 'Compte inexistant'; // pas bon 
+                }
+
             };
         };
     };
@@ -64,13 +69,13 @@
         include 'Parts/nav.php';  
     ?>
     <?php
-        if(isset($errors)){
+        if(isset($errors)){ // afffichage erreur
             foreach($errors as $error){
                 echo '<p style="color:red;">' . $error . '</p>';
             }
         }
-        if(isset($successMessage)){
-            echo '<p style="color:green;">' . $successMessage . '</p>';
+        if(isset($successMessage)){ // affichage succes
+            echo '<p class="alert alert-success col-12" style="color:green;">' . $successMessage .'<a href="index.php">Cliquez ici</a> pour revenir à l\'accueil </p>';
         } else {         
         if(!isConnected()){
     ?>
