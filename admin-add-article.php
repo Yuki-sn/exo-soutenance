@@ -2,52 +2,54 @@
     require 'Parts/connexion.php';
     session_start();
 
+    if($_SESSION['user']['admin'] == 1){  
+        
+        if(
+            isset($_POST['title']) && 
+            isset($_POST['content']) 
+        ){
 
-    if(
-        isset($_POST['title']) && 
-        isset($_POST['content']) 
-    ){
+            if(mb_strlen($_POST['title']) < 2 || mb_strlen($_POST['title']) > 150 ){
+                $errors[] = ' Le titre doit avoir entre 2 et 150 caractères ';
+            };
 
-        if(mb_strlen($_POST['title']) < 2 || mb_strlen($_POST['title']) > 150 ){
-            $errors[] = ' Le titre doit avoir entre 2 et 150 caractères ';
-        };
+            if(mb_strlen($_POST['content']) < 2 || mb_strlen($_POST['content']) > 20000 ){
+                $errors[] = ' Le titre doit avoir entre 2 et 20000 caractères =)';
+            };
 
-        if(mb_strlen($_POST['content']) < 2 || mb_strlen($_POST['content']) > 20000 ){
-            $errors[] = ' Le titre doit avoir entre 2 et 20000 caractères =)';
-        };
+            if(!isset($errors)){
+                //connexion a la bdd
+                try{
+                    $bdd = new PDO('mysql:host=localhost;dbname=la_saint_redstone;charset=utf8', 'root', '');
+        
+                    $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        
+                } catch(Exception $e){
+        
+                    die('Il y a un problème avec la bdd : ' . $e->getMessage());
+                }    
 
-        if(!isset($errors)){
-            //connexion a la bdd
-            try{
-                $bdd = new PDO('mysql:host=localhost;dbname=la_saint_redstone;charset=utf8', 'root', '');
-    
-                $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
-            } catch(Exception $e){
-    
-                die('Il y a un problème avec la bdd : ' . $e->getMessage());
-            }    
+                $response = $bdd->prepare("INSERT INTO `article`(`title`, `author`, `create_date`, `content`) VALUES (?,?,?,?)");
 
-            $response = $bdd->prepare("INSERT INTO `article`(`title`, `author`, `create_date`, `content`) VALUES (?,?,?,?)");
+                $response->execute([
+                    $_POST['title'],
+                    $_SESSION['user']['id'],
+                    date('Y-m-d H:i:s'),
+                    $_POST['content']
+                ]);
+            
+            }
 
-            $response->execute([
-                $_POST['title'],
-                $_SESSION['user']['id'],
-                date('Y-m-d H:i:s'),
-                $_POST['content']
-            ]);
-           
+            if($response->rowCount() > 0){
+
+                $successMessage = 'Votre artciles a bien étais ajouter ';
+            }else {
+                $errors[] = 'Problème avec l\'ajout à la bdd';
+            }
+
+            $response->closeCursor();
         }
-
-        if($response->rowCount() > 0){
-
-            $successMessage = 'Votre artciles a bien étais ajouter ';
-        }else {
-            $errors[] = 'Problème avec l\'ajout à la bdd';
-        }
-
-        $response->closeCursor();
-    }
+    };
     
 ?>
 

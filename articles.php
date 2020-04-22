@@ -1,6 +1,9 @@
 <?php 
     require 'Parts/connexion.php';
     session_start();
+    
+    
+ 
     //connexion a la bdd
     try{
         $bdd = new PDO('mysql:host=localhost;dbname=la_saint_redstone;charset=utf8', 'root', '');
@@ -12,17 +15,21 @@
         die('Il y a un problème avec la bdd : ' . $e->getMessage());
     }
 
-
-    $response = $bdd->query("SELECT `title`,`create_date`, users.firstname, users.lastname FROM article INNER JOIN users ON author = users.id ORDER BY create_date
-    ");
+    $response = $bdd->query("SELECT article.id , article.title , article.create_date , users.firstname, users.lastname FROM article INNER JOIN users ON author = users.id ORDER BY create_date");
 
     $articles = $response->fetchAll(PDO::FETCH_ASSOC);
-    // echo '<pre>';
-    // print_r($articles);
-    // echo '</pre>';
-
     $response->closeCursor();
+       
+    
+    if(isConnected()){
 
+        if($_SESSION['user']['admin'] == 1){
+            $a = true;
+        };
+    }else{
+        $a = false;
+    }
+    
 
 ?>
 
@@ -40,7 +47,8 @@
 </head>
 <body>
     <?php 
-        include 'Parts/nav.php';  
+        include 'Parts/nav.php'; 
+         
     ?>
     <div class="container">
         <div class="row">
@@ -56,20 +64,41 @@
             </thead>
             <tbody>
                 <tr>
-                    <td class="col-6">                                                                               
-                        <a href="article.php?id=2"><?php echo htmlspecialchars($articles[0]['title']) ?></a>
+                    <td class="col-6">
+                        <?php 
+                            if($a == true){ 
+                                echo '
+                                    <a class="h5 text-danger mr-3" href="admin-delete-article.php?id='.htmlspecialchars($articles[0]['id']).'">
+                                        <i class="fas fa-times"></i>
+                                    </ <a>';
+                            };
+                        ?> 
+                        <a href="article_info.php?id=<?php echo htmlspecialchars($articles[0]['id']) ?>"><?php echo htmlspecialchars($articles[0]['title']) ?></a>
                     </td>
-                    <td class="col-2"><?php echo htmlspecialchars($articles[0]['firstname']).' '.htmlspecialchars($articles[0]['lastname']) ?></td>
+                    <td class="col-2"><?php echo htmlspecialchars($articles[0]['firstname']).' '.htmlspecialchars($articles[0]['lastname']) ?></td>                    
 
                     <td class="col-3"><?php echo htmlspecialchars($articles[0]['create_date']); ?></td>
-                    </tr>
-                    <tr>
+
+                </tr>
+
+                <tr>
                     <td class="col-6">
-                        <a href="article.php?id=1"><?php echo htmlspecialchars($articles[1]['title']) ?></a>
+                        <?php 
+                                if($a == true){ 
+                                    echo '
+                                        <a class="h5 text-danger mr-3" href="admin-delete-article.php?id='.htmlspecialchars($articles[0]['id']).'">
+                                            <i class="fas fa-times"></i>
+                                        </ <a>';
+                                };
+                            ?> 
+                        <a href="article_info.php?id=<?php echo htmlspecialchars($articles[1]['id']) ?>"><?php echo htmlspecialchars($articles[1]['title']) ?></a>
                     </td>
+
                     <td class="col-2"><?php echo htmlspecialchars($articles[1]['firstname']).' '.htmlspecialchars($articles[1]['lastname']) ?></td>
-                    </td>      
-                    <td class="col-3"><?php echo htmlspecialchars($articles[1]['create_date']); ?></td>
+
+                    </td>   
+
+                    <td class="col-3"><?php echo htmlspecialchars($articles[1]['create_date']); ?></td>   
                 </tr>
             </tbody>
         </table>
