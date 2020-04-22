@@ -72,7 +72,7 @@
 
         </ul>
 
-        <form class="form-inline my-2 my-lg-0" method="GET">
+        <form class="form-inline my-2 my-lg-0" method="GET" action="search.php">
 
             <input class="form-control mr-sm-2" type="text" placeholder="Chercher un article" name="query">
 
@@ -82,3 +82,4 @@
 
     </div>
 </nav>
+
