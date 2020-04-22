@@ -26,11 +26,11 @@
         <div class="row">
             <div class="col-md-6 offset-md-3 my-4">
                 <ul class="list-group">
-                    <li class="list-group-item"><strong>Email</strong> : <?php echo $_SESSION['user']['email'] ?>                      </li>
-                    <li class="list-group-item"><strong>Prénom</strong> : <?php echo $_SESSION['user']['firstname'] ?>                     </li>
-                    <li class="list-group-item"><strong>Nom</strong> : <?php echo $_SESSION['user']['lastname'] ?>                        </li>
+                    <li class="list-group-item"><strong>Email</strong> : <?php echo htmlspecialchars($_SESSION['user']['email']) ?></li>
+                    <li class="list-group-item"><strong>Prénom</strong> : <?php echo htmlspecialchars($_SESSION['user']['firstname']) ?></li>
+                    <li class="list-group-item"><strong>Nom</strong> : <?php echo htmlspecialchars($_SESSION['user']['lastname']) ?></li>
                     <li class="list-group-item"><strong>Status</strong> : <?php if($_SESSION['user']['admin'] == 0){echo 'compte utilisateur ';}elseif($_SESSION['user']['admin'] ==1 ){echo ' compte administrateur';};?></li>
-                    <li class="list-group-item"><strong>Date d'inscription</strong> : <?php echo $_SESSION['user']['register_date'] ?>         </li>
+                    <li class="list-group-item"><strong>Date d'inscription</strong> : <?php echo htmlspecialchars($_SESSION['user']['register_date']) ?></li>
                 </ul>
             </div>
         </div>

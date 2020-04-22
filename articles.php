@@ -1,6 +1,28 @@
 <?php 
     require 'Parts/connexion.php';
     session_start();
+    //connexion a la bdd
+    try{
+        $bdd = new PDO('mysql:host=localhost;dbname=la_saint_redstone;charset=utf8', 'root', '');
+
+        $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    } catch(Exception $e){
+
+        die('Il y a un problème avec la bdd : ' . $e->getMessage());
+    }
+
+
+    $response = $bdd->query("SELECT `title`,`create_date`, users.firstname, users.lastname FROM article INNER JOIN users ON author = users.id ORDER BY create_date
+    ");
+
+    $articles = $response->fetchAll(PDO::FETCH_ASSOC);
+    // echo '<pre>';
+    // print_r($articles);
+    // echo '</pre>';
+
+    $response->closeCursor();
+
 
 ?>
 
@@ -35,19 +57,19 @@
             <tbody>
                 <tr>
                     <td class="col-6">                                                                               
-                        <a href="article.php?id=2">Les voitures sans roues s...</a>
+                        <a href="article.php?id=2"><?php echo htmlspecialchars($articles[0]['title']) ?></a>
                     </td>
-                    <td class="col-2">Alice</td>
+                    <td class="col-2"><?php echo htmlspecialchars($articles[0]['firstname']).' '.htmlspecialchars($articles[0]['lastname']) ?></td>
 
-                    <td class="col-3">lundi 20 avril 2020 à 19:17:33</td>
+                    <td class="col-3"><?php echo htmlspecialchars($articles[0]['create_date']); ?></td>
                     </tr>
                     <tr>
                     <td class="col-6">
-                        <a href="article.php?id=1">Sortie de la nouvelle Peu...</a>
+                        <a href="article.php?id=1"><?php echo htmlspecialchars($articles[1]['title']) ?></a>
                     </td>
-                    <td class="col-2">Alice</td>
+                    <td class="col-2"><?php echo htmlspecialchars($articles[1]['firstname']).' '.htmlspecialchars($articles[1]['lastname']) ?></td>
                     </td>      
-                    <td class="col-3">lundi 20 avril 2020 à 19:16:00</td>
+                    <td class="col-3"><?php echo htmlspecialchars($articles[1]['create_date']); ?></td>
                 </tr>
             </tbody>
         </table>

@@ -23,22 +23,35 @@
         <?php 
         
             if(isConnected()){
-                echo '
-                <li class="nav-item">
-                    <a class="nav-link" href="logout.php">Deconnexion</a>
-                </li>
+                if($_SESSION['user']['admin'] == 1){
+                    echo '                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout.php">Deconnexion</a>
+                    </li>
+    
+                    <li class="nav-item">
+                        <a class="nav-link" href="profil.php">profil</a>
+                    </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="profil.php">profil</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Admin</a>
-                    <div class="dropdown-menu"> 
-                        <a class="dropdown-item" href="admin-add-article.php">Ajouter un article</a>
+                    <li class="nav-item">
+                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="true">Admin</a>
+                        <div class="dropdown-menu"> 
+                            <a class="dropdown-item" href="admin-add-article.php">Ajouter un article</a>
                         </div>
-                </li>';
-            } else {
+                    </li>';
+
+                }elseif($_SESSION['user']['admin'] == 0 ){
+                    echo '
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout.php">Deconnexion</a>
+                    </li>
+    
+                    <li class="nav-item">
+                        <a class="nav-link" href="profil.php">profil</a>
+                    </li>';
+                }
+            
+            }else{
                 echo '
 
                 <li class="nav-item">
@@ -46,10 +59,13 @@
                 </li>
 
                 <li class="nav-item">
-                <a class="nav-link" href="register.php">Inscription</a>
+                    <a class="nav-link" href="register.php">Inscription</a>
                 </li>';
-            };  
-        
+                
+            };
+
+
+            
         ?>
             
             
